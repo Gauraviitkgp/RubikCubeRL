@@ -15,13 +15,17 @@ env = Env.RubikCube()
 
 
 GAMMA				= 0.99
-TOTAL_EPISODES		= 10000 #Set total number of episodes to train agent on.
+TOTAL_EPISODES		= 100000 #Set total number of episodes to train agent on.
 MAX_EP_LENGTH		= 5
 UPDATE_FREQUENCY	= 5
 STATE_SIZE			= 54*6
 ACTION_SIZE			= 12
 LR_RATE 			= 1e-2
 HIDDEN_LYR_SIZE     = 8
+TRAIN_PATH			= 'tensorboard_training/2_mscr_e-2LR_SparseRewards'
+
+# log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+global_summary = tf.compat.v1.summary.FileWriter(TRAIN_PATH)
 
 def discount_rewards(r):
     """ take 1D float array of rewards and compute discounted reward """
@@ -57,7 +61,7 @@ class agent():
 		# Loss = mean(log(outputs)*rewards) #Reduce mean computes mean of given set of vecotrs
         self.loss = -tf.reduce_mean(tf.math.log(self.responsible_outputs)*self.reward_holder)
         
-        tvars = tf.trainable_variables()
+        tvars = tf.compat.v1.trainable_variables()
         #Gradient Holder
         self.gradient_holders = []
         for idx,var in enumerate(tvars):
@@ -72,7 +76,7 @@ class agent():
         self.update_batch = optimizer.apply_gradients(zip(self.gradient_holders,tvars))
 
 
-tf.reset_default_graph() #Clear the Tensorflow graph.
+tf.compat.v1.reset_default_graph() #Clear the Tensorflow graph.
 
 myAgent = agent(lr=LR_RATE,s_size=STATE_SIZE,a_size=ACTION_SIZE,h_size=HIDDEN_LYR_SIZE) #Load the agent.
 
@@ -91,7 +95,7 @@ with tf.Session() as sess:
         gradBuffer[ix] = grad * 0
         
     while i < TOTAL_EPISODES:
-        s = env.reset(1) #Maximum 10 Steps
+        s = env.reset(2) #Maximum 10 Steps
         running_reward = 0
         ep_history = []
         for j in range(MAX_EP_LENGTH):
@@ -126,6 +130,10 @@ with tf.Session() as sess:
                 break
 
             #Update our running tally of scores.
+        summary = tf.Summary()
+        summary.value.add(tag='Perf/total_reward', simple_value = running_reward)
+        global_summary.add_summary(summary, int(i))
+        global_summary.flush()
         if i % 100 == 0:
 	        print(np.mean(total_reward[-100:]))
         i += 1
