@@ -15,8 +15,8 @@ env = Env.RubikCube()
 
 
 GAMMA				= 0.99
-TOTAL_EPISODES		= 5000 #Set total number of episodes to train agent on.
-MAX_EP				= 999
+TOTAL_EPISODES		= 10000 #Set total number of episodes to train agent on.
+MAX_EP_LENGTH		= 5
 UPDATE_FREQUENCY	= 5
 STATE_SIZE			= 54*6
 ACTION_SIZE			= 12
@@ -48,9 +48,10 @@ class agent():
         self.reward_holder = tf.compat.v1.placeholder(shape=[None],dtype=tf.float32)
         self.action_holder = tf.compat.v1.placeholder(shape=[None],dtype=tf.int32)
         
-        #Creates an increasing array of [0,1,.. size of(output) in 0th axis] * size  of (output) in 1st axis + action_holder
+        #Outputs can be sometimes 2D, thus the next two lines establishes indexing of outputs. First 0..m*n indexing is done for mxn size of outputs
+        #Then an for each outputs in self.output indexing is done.
+
         self.indexes = tf.range(0, tf.shape(self.output)[0]) * tf.shape(self.output)[1] + self.action_holder
-        #Gathers the important outputs, reshapes output to 1 hot vector, and select important elements by by self.indexes
         self.responsible_outputs = tf.gather(tf.reshape(self.output, [-1]), self.indexes)
 
 		# Loss = mean(log(outputs)*rewards) #Reduce mean computes mean of given set of vecotrs
@@ -90,10 +91,10 @@ with tf.Session() as sess:
         gradBuffer[ix] = grad * 0
         
     while i < TOTAL_EPISODES:
-        s = env.reset(10) #Maximum 10 Steps
+        s = env.reset(1) #Maximum 10 Steps
         running_reward = 0
         ep_history = []
-        for j in range(MAX_EP):
+        for j in range(MAX_EP_LENGTH):
             #Probabilistically pick an action given our network outputs.
             a_dist = sess.run(myAgent.output,feed_dict={myAgent.state_in:[s]})
             a = np.random.choice(a_dist[0],p=a_dist[0])
@@ -103,6 +104,7 @@ with tf.Session() as sess:
             ep_history.append([s,a,r,s1])
             s = s1
             running_reward += r
+            # print(r)
             if d == True:
                 #Update the network.
                 ep_history = np.array(ep_history)
@@ -123,8 +125,7 @@ with tf.Session() as sess:
                 total_length.append(j)
                 break
 
-        
             #Update our running tally of scores.
-        # if i % 100 == 0:
-        print(np.mean(total_reward[-100:]))
-        # i += 1
+        if i % 100 == 0:
+	        print(np.mean(total_reward[-100:]))
+        i += 1

@@ -9,6 +9,7 @@ class RubikCube(object):
 		self.cube = pc.Cube()
 
 	def reset(self,max_scrambles):
+		self.cube = pc.Cube()
 		alg = pc.Formula()
 		#Random arrangement
 		random_alg = alg.random()
@@ -19,12 +20,13 @@ class RubikCube(object):
 			random_alg = random_alg[:max_scrambles]
 
 		self.cube(random_alg)
-
+		# print(utils.perc_solved_cube(self.cube)*100)
 		return utils.flatten_1d_b(self.cube) #return states
 
 
 	# def reward(self, tcube):
 	def reward(self):
+		
 		if utils.perc_solved_cube(self.cube)==1:
 			return 1000,True
 
@@ -44,3 +46,9 @@ class RubikCube(object):
 
 		return utils.flatten_1d_b(self.cube),rwd,over
 
+if __name__ == '__main__':
+	k = RubikCube()
+	while(1):
+
+		k.reset(1)
+		print(utils.perc_solved_cube(k.cube)*100)
