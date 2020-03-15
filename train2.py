@@ -22,7 +22,7 @@ STATE_SIZE			= 54*6
 ACTION_SIZE			= 12
 LR_RATE 			= 1e-2
 HIDDEN_LYR_SIZE     = 8
-TRAIN_PATH			= 'tensorboard_training/4_L4_mscr_e-2LR_ContRewards'
+TRAIN_PATH			= 'tensorboard_training/4_L4_mscr_e-2LR_CContRewards'
 
 # log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 global_summary = tf.compat.v1.summary.FileWriter(TRAIN_PATH)
@@ -109,8 +109,8 @@ with tf.Session() as sess:
             s = s1
             running_reward += r
 
-            # if j==MAX_EP_LENGTH-1:
-            # 	d=True
+            if j==MAX_EP_LENGTH-1:
+            	d = True
             # print(r)
             if d == True:
                 #Update the network.

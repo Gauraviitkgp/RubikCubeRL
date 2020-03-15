@@ -24,25 +24,25 @@ class RubikCube(object):
 		return utils.flatten_1d_b(self.cube) #return states
 
 
-	# def reward(self, tcube):
-	def reward(self):
+	def reward(self, tcube):
+	# def reward(self):
 		
 		if utils.perc_solved_cube(self.cube)==1:
 			return 1000,True
 
-		return -1,False
+		return (utils.perc_solved_cube(self.cube)-utils.perc_solved_cube(tcube))*100,False
 
 
 	def step(self, action):
 		lookup     = ["R", "L","D","U","B","F","R'", "L'","D'","U'","B'","F'"] #We are not accounting for half turns
 
-		#tcube = self.cube.copy()
+		tcube = self.cube.copy()
 
 		step_taken = pc.Formula(lookup[action])
 
 		self.cube(step_taken) 
 
-		rwd,over = self.reward()
+		rwd,over = self.reward(tcube)
 
 		return utils.flatten_1d_b(self.cube),rwd,over
 
