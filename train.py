@@ -1,7 +1,6 @@
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 import numpy as np
-# import matplotlib.pyplot as plt
 import environment as Env
 
 try:
@@ -21,10 +20,11 @@ STATE_SIZE			= 54*6
 ACTION_SIZE			= 12
 LR_RATE 			= 1e-3
 HIDDEN_LYR_SIZE     = 8
-TRAIN_PATH			= 'tensorboard_training/4_randomsize_e-3_ContRewards'
+TENSORBOARD_PATH    = 'tensorboard_training/4_L4_mscr_e-2LR_CContRewards'
+CHECKPOINT_PATh     = "saved_training/cp.ckpt"
 
 # log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-global_summary = tf.compat.v1.summary.FileWriter(TRAIN_PATH)
+global_summary = tf.compat.v1.summary.FileWriter(TENSORBOARD_PATH)
 
 def discount_rewards(r):
     """ take 1D float array of rewards and compute discounted reward """
