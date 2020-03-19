@@ -1,8 +1,7 @@
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 import numpy as np
-import gym
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import environment as Env
 
 try:
@@ -20,9 +19,9 @@ MAX_EP_LENGTH		= 7
 UPDATE_FREQUENCY	= 5
 STATE_SIZE			= 54*6
 ACTION_SIZE			= 12
-LR_RATE 			= 1e-2
+LR_RATE 			= 1e-3
 HIDDEN_LYR_SIZE     = 8
-TRAIN_PATH			= 'tensorboard_training/4_L4_mscr_e-2LR_ContRewards'
+TRAIN_PATH			= 'tensorboard_training/4_randomsize_e-3_ContRewards'
 
 # log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 global_summary = tf.compat.v1.summary.FileWriter(TRAIN_PATH)
@@ -109,8 +108,8 @@ with tf.Session() as sess:
             s = s1
             running_reward += r
 
-            # if j==MAX_EP_LENGTH-1:
-            # 	d=True
+            if j==MAX_EP_LENGTH-1:
+            	d=True
             # print(r)
             if d == True:
                 #Update the network.

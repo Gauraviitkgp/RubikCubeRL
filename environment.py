@@ -1,6 +1,7 @@
-import numpy as np 
-import pycuber as pc 
+import numpy as np
+import pycuber as pc
 import utils
+
 
 class RubikCube(object):
 	"""docstring for env"""
@@ -17,8 +18,8 @@ class RubikCube(object):
 		if max_scrambles==None:
 			pass
 		else:
+			max_scrambles = np.random.choice(list(range(max_scrambles)))
 			random_alg = random_alg[:max_scrambles]
-
 		self.cube(random_alg)
 		# print(utils.perc_solved_cube(self.cube)*100)
 		return utils.flatten_1d_b(self.cube) #return states
@@ -40,15 +41,16 @@ class RubikCube(object):
 
 		step_taken = pc.Formula(lookup[action])
 
-		self.cube(step_taken) 
+		self.cube(step_taken)
 
-		rwd,over = self.reward(tcube)
+		rwd, over = self.reward(tcube)
 
-		return utils.flatten_1d_b(self.cube),rwd,over
+		return utils.flatten_1d_b(self.cube), rwd, over
 
-if __name__ == '__main__':
+if __name__ == '__main__':	
 	k = RubikCube()
 	while(1):
 
-		k.reset(1)
-		print(utils.perc_solved_cube(k.cube)*100)
+		k.reset(7)
+		print(k)
+		# print(utils.perc_solved_cube(k.cube)*100)
