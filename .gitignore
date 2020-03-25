@@ -2,3 +2,4 @@ venv
 python36.lnk
 __pycache*
 tensorboard*
+saved_training/
