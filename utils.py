@@ -3,7 +3,6 @@ from random import choice
 
 import numpy as np
 import pycuber as pc
-import sklearn
 
 action_map = {'F': 0, 'B': 1, 'U': 2, 'D': 3, 'L': 4, 'R': 5, "F'": 6, "B'": 7, "U'": 8, "D'": 9, "L'": 10, "R'": 11,
               'F2': 12, 'B2': 13, 'U2': 14, 'D2': 15, 'L2': 16, 'R2': 17, "F2'": 18, "B2'": 19, "U2'": 20, "D2'": 21,
@@ -25,17 +24,6 @@ def flatten(cube):
                 flat.append(x[i][j].colour)
     return flat
 
-# uncomment the below block and uncomment the line above return in function below(flatten_1d_b)
-# to squeeze the input list features from 324 to 10
-'''
-w = np.random.rand(10, 324)
-def reduce_dims(flat):
-    flat = np.array(flat)
-    reduced = w.dot(flat)
-    reduced = sklearn.preprocessing.normalize(reduced.reshape(-1, 1), axis = 0).reshape(10)
-    # print(reduced.shape)
-    return list(reduced)
-'''
 
 def flatten_1d_b(cube):
     sides = [cube.F, cube.B, cube.U, cube.D, cube.L, cube.R]
@@ -44,7 +32,6 @@ def flatten_1d_b(cube):
         for i in range(3):
             for j in range(3):
                 flat.extend(color_list_map[x[i][j].colour])
-    # flat = reduce_dims(flat)
     return flat
 
 

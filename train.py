@@ -16,13 +16,12 @@ GAMMA				= 0.99
 TOTAL_EPISODES		= 100000 #Set total number of episodes to train agent on.
 MAX_EP_LENGTH		= 7
 UPDATE_FREQUENCY	= 5
-STATE_SIZE			= 324
+STATE_SIZE			= 54*6
 ACTION_SIZE			= 12
 LR_RATE 			= 1e-3
 HIDDEN_LYR_SIZE     = 8
 TENSORBOARD_PATH    = 'tensorboard_training/4_L4_mscr_e-2LR_CContRewards'
-CHECKPOINT_PATH     = "saved_training/saved_model"
-CHECKPOINT_FREQ     = 5000
+CHECKPOINT_PATh     = "saved_training/cp.ckpt"
 
 # log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 global_summary = tf.compat.v1.summary.FileWriter(TENSORBOARD_PATH)
@@ -82,7 +81,6 @@ myAgent = agent(lr=LR_RATE,s_size=STATE_SIZE,a_size=ACTION_SIZE,h_size=HIDDEN_LY
 
 
 init = tf.compat.v1.global_variables_initializer()
-saver = tf.train.Saver()
 
 # Launch the tensorflow graph
 with tf.Session() as sess:
@@ -142,4 +140,3 @@ with tf.Session() as sess:
         if i % 1000 == 0:
 	        print(i,":",np.mean(total_reward[-100:]))
         i += 1
-        saver.save(sess, CHECKPOINT_PATH, global_step = CHECKPOINT_FREQ)
