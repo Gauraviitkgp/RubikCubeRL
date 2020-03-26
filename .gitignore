@@ -3,3 +3,4 @@ python36.lnk
 __pycache*
 tensorboard*
 saved_training/
+python=3.6
