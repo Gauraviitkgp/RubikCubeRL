@@ -83,16 +83,16 @@ myAgent = agent(lr=LR_RATE,s_size=STATE_SIZE,a_size=ACTION_SIZE,h_size=HIDDEN_LY
 
 
 init = tf.compat.v1.global_variables_initializer()
-saver = tf.train.Saver(max_to_keep = MAX_MODELS_TO_SAVE)
+saver = tf.compat.v1.train.Saver(max_to_keep = MAX_MODELS_TO_SAVE)
 
 # Launch the tensorflow graph
-with tf.Session() as sess:
+with tf.compat.v1.Session() as sess:
 	sess.run(init)
 	i = 0
 	total_reward = []
 	total_length = []
 		
-	gradBuffer = sess.run(tf.trainable_variables())
+	gradBuffer = sess.run(tf.compat.v1.trainable_variables())
 	for ix,grad in enumerate(gradBuffer):
 		gradBuffer[ix] = grad * 0
 	
@@ -135,7 +135,7 @@ with tf.Session() as sess:
 				break
 
 			#Update our running tally of scores.
-		summary = tf.Summary()
+		summary = tf.compat.v1.Summary()
 		summary.value.add(tag='Perf/total_reward', simple_value = running_reward)
 		#summary.value.add(tag='Data/Gradients', simple_value = grads)
 		global_summary.add_summary(summary, int(i))
