@@ -1,8 +1,9 @@
 # RubikCubeRL
 ## Initial Setup
 ```
-python -m venv .\venv python=3.6  
+python -m venv .\venv
 .\venv\scripts\activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
